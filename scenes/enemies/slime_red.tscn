@@ -1,0 +1,80 @@
+[gd_scene load_steps=11 format=3 uid="uid://djy47j280t4av"]
+
+[ext_resource type="Script" path="res://scripts/enemies/slime_red.gd" id="1_wfjq2"]
+[ext_resource type="Texture2D" uid="uid://yo7fvhtyp007" path="res://assets/sprites/slime_purple.png" id="2_7mou7"]
+[ext_resource type="PackedScene" uid="uid://bu42hffck57lb" path="res://scenes/killzone.tscn" id="3_n2yfa"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rvdpw"]
+atlas = ExtResource("2_7mou7")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7kolr"]
+atlas = ExtResource("2_7mou7")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rarow"]
+atlas = ExtResource("2_7mou7")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_obbdx"]
+atlas = ExtResource("2_7mou7")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_eq6kb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rvdpw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7kolr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rarow")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_obbdx")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x2mpm"]
+size = Vector2(10, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8hnfw"]
+size = Vector2(8, 12)
+
+[node name="SlimeRed" type="CharacterBody2D"]
+script = ExtResource("1_wfjq2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_eq6kb")
+autoplay = "default"
+frame = 3
+frame_progress = 0.613328
+
+[node name="killzone" parent="AnimatedSprite2D" instance=ExtResource("3_n2yfa")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/killzone"]
+position = Vector2(0, 5.5)
+shape = SubResource("RectangleShape2D_x2mpm")
+
+[node name="RayCastRight" type="RayCast2D" parent="."]
+position = Vector2(0, -6)
+target_position = Vector2(7, 0)
+
+[node name="RayCastLeft" type="RayCast2D" parent="."]
+position = Vector2(0, -6)
+target_position = Vector2(-7, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_8hnfw")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
